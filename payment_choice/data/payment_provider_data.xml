@@ -15,6 +15,11 @@
                    ref('payment.payment_icon_cc_american_express'),
                    ref('payment.payment_icon_cc_visa'),
                ])]"/>
+        <field name="choice_user_name">dummy</field>
+        <field name="choice_password">dummy</field>
+        <field name="choice_merch_guid">dummy</field>
+        <field name="choice_device_cc_guid">dummy</field>
+        <field name="choice_device_ach_guid">dummy</field>
         <field name="pre_msg">
             <![CDATA[
             <p>You will be redirected to the Choice payment page after clicking on the payment button.</p>
