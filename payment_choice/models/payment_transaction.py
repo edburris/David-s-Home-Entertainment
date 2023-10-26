@@ -93,13 +93,13 @@ class PaymentTransaction(models.Model):
                 "OtherInfo": self.reference,
                 "Customer":
                     {
-                        "FirstName": self.partner_name.split(" ", 1)[0],
-                        "LastName": self.partner_name.split(" ", 1)[1],
+                        "FirstName": self.partner_name.split(" ", 1)[0] or None,
+                        "LastName": self.partner_name.split(" ", 1)[1] or None,
                         "Phone": phone_number, #re.sub('[^0-9]', '', self.partner_phone)[2:] ,
                         "City": self.partner_city or None,
-                        "Email": self.partner_email,
-                        "Address1": self.partner_address,
-                        "Zip": self.partner_zip,
+                        "Email": self.partner_email or None,
+                        "Address1": self.partner_address or None,
+                        "Zip": self.partner_zip or None,
                     }
                 }
         _logger.info("********PAYLOAD: %s", payload)
