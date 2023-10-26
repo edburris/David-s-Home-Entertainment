@@ -10,8 +10,6 @@ from odoo import _, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.http import request
 
-from odoo.addons.payment import utils as payment_utils
-from odoo.addons.payment_choice import utils as choice_utils
 from odoo.addons.payment_choice.const import SALES_URL, TOKEN_URL, HOSTED_PAYMENT_PAGE_REQUEST_URL, HOSTED_PAYMENT_PAGE_URL, RETURNS_URL, AUTHS_ONLY_URL, CAPTURES_URL, BANK_CLEARING_GET_URL
 
 _logger = logging.getLogger(__name__)

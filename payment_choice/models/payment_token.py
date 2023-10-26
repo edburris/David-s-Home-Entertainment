@@ -4,7 +4,6 @@ import logging
 import pprint
 
 from odoo import _, fields, models
-from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 

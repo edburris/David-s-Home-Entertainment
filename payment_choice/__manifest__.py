@@ -2,7 +2,7 @@
 
 {
     'name': 'Payment Provider: Choice',
-    'version': '0.9',
+    'version': '1.0',
     'category': 'Accounting/Payment Providers',
     'summary': "An American payment provider covering the US and many others.",
     'depends': ['payment'],
@@ -10,11 +10,10 @@
         'views/payment_provider_views.xml',
         'views/payment_choice_templates.xml',
 
-        'data/payment_provider_data.xml',  # Depends on views/payment_choice_templates.xml
+        'data/payment_provider_data.xml',
     ],
     'application': False,
     'post_init_hook': 'post_init_hook',
     'uninstall_hook': 'uninstall_hook',
-    # },
     'license': 'LGPL-3',
 }

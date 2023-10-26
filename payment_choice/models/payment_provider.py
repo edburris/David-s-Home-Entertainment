@@ -10,8 +10,6 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 from odoo.addons.payment_choice import utils as choice_utils
-# from odoo.addons.payment_choice.controllers.main import ChoiceController
-
 
 _logger = logging.getLogger(__name__)
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-
     <record id="payment_provider_choice" model="payment.provider">
         <field name="code">choice</field>
         <field name="name">Choice</field>
