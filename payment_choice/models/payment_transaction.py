@@ -96,7 +96,7 @@ class PaymentTransaction(models.Model):
                         "FirstName": self.partner_name.split(" ", 1)[0],
                         "LastName": self.partner_name.split(" ", 1)[1],
                         "Phone": phone_number, #re.sub('[^0-9]', '', self.partner_phone)[2:] ,
-                        "City": self.partner_city,
+                        "City": self.partner_city or None,
                         "Email": self.partner_email,
                         "Address1": self.partner_address,
                         "Zip": self.partner_zip,
