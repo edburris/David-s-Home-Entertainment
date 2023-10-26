@@ -76,13 +76,13 @@ class PaymentTransaction(models.Model):
         if self.provider_code != 'choice':
             return res
         _logger.info("Choice _get_specific_rendering_values")
-        base_url = "https://boar-open-totally.ngrok-free.app" #self.provider_id.get_base_url()
+        base_url = self.provider_id.get_base_url()
         
         payload = {
                 "DeviceCreditCardGuid" : self.provider_id.choice_device_cc_guid,
                 "DeviceAchGuid": self.provider_id.choice_device_ach_guid,
                 "Merchantname": self.company_id.name,
-                "Description": f"{self.company_id.name} {self.reference} Payment", #"TESTING DESCRIPTION", 
+                "Description": f"{self.company_id.name} {self.reference} Payment", 
                 "Amount": float(self.amount),
                 "OtherURL": urls.url_join(base_url, "payment/choice/other" + '?reference=%s' % self.reference),
                 "SuccessURL": urls.url_join(base_url, "payment/choice/success"+ '?reference=%s' % self.reference),
@@ -93,7 +93,7 @@ class PaymentTransaction(models.Model):
                     {
                         "FirstName": self.partner_name.split(" ", 1)[0],
                         "LastName": self.partner_name.split(" ", 1)[1],
-                        "Phone": re.sub('[^0-9]', '', self.partner_phone)[2:],
+                        "Phone": re.sub('[^0-9]', '', self.partner_phone)[2:] or "0000000000",
                         "City": self.partner_city,
                         "Email": self.partner_email,
                         "Address1": self.partner_address,
@@ -246,7 +246,7 @@ class PaymentTransaction(models.Model):
             'AUTHORIZATION': f'Bearer {bearer_token}',
             'content_type': 'application/json'
         }
-        url = RETURNS_URL #"https://sandbox.choice.dev/api/v1/returns"
+        url = RETURNS_URL
         _logger.info("SEND REFUND REQUEST PAYLOAD: %s", payload);
         res = requests.post(url=url, headers=headers, json=payload)
         _logger.info(
@@ -325,7 +325,7 @@ class PaymentTransaction(models.Model):
                 }
         _logger.info("********PAYLOAD: %s", payload)
         
-        url = AUTHS_ONLY_URL #"https://sandbox.choice.dev/api/v1/AuthOnlys"
+        url = AUTHS_ONLY_URL
         bearer_token = self._get_choice_bearer_token()
         headers = {
             'AUTHORIZATION': f'Bearer {bearer_token}',
@@ -344,7 +344,7 @@ class PaymentTransaction(models.Model):
                 }
             _logger.info("********PAYLOAD: %s", payload)
             
-            url = CAPTURES_URL #"https://sandbox.choice.dev/api/v1/Captures"
+            url = CAPTURES_URL
             bearer_token = self._get_choice_bearer_token()
             headers = {
                 'AUTHORIZATION': f'Bearer {bearer_token}',

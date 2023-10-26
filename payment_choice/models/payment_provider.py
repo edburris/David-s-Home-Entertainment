@@ -58,89 +58,89 @@ class PaymentProvider(models.Model):
 
     #=== CONSTRAINT METHODS ===#
 
-    # === BUSINESS METHODS - PAYMENT FLOW === #
+    # # === BUSINESS METHODS - PAYMENT FLOW === #
 
-    def _choice_make_bearer_token():
-        self.ensure_one()
-        url = url_join('https://sandboxv2.choice.dev/api/v1/token')
-        payload = {"grant_type": "password", 
-                   "username": choice_utils.get_choice_user_name,
-                   "password": choice_utils.get_choice_password  
-                   }
-        _logger.info("CHOICE MAKE BEARER TOEKN REQUEST PAYLOAD: " + payload)
-        try:
-            response = requests.request(method='POST', url=url, data=payload, headers=None, timeout=60)
-            # Choice can send 4XX errors for payment failures (not only for badly-formed requests).
-            # Check if an error code is present in the response content and raise only if not.
-            # See https://developers.choice.dev/#other-errors.
-            # If the request originates from an offline operation, don't raise to avoid a cursor
-            # rollback and return the response as-is for flow-specific handling.
-            if not response.ok \
-                    and 400 <= response.status_code < 500 \
-                    and response.json().get('error'):  # The 'code' entry is sometimes missing
-                try:
-                    response.raise_for_status()
-                except requests.exceptions.HTTPError:
-                    _logger.exception("invalid API request at %s with data %s", url, payload)
-                    error_msg = response.json().get('error', {}).get('message', '')
-                    raise ValidationError(
-                        "Choice: " + _(
-                            "The communication with the API failed.\n"
-                            "Choice gave us the following info about the problem:\n'%s'", error_msg
-                        )
-                    )
-        except requests.exceptions.ConnectionError:
-            _logger.exception("unable to reach endpoint at %s", url)
-            raise ValidationError("Choice: " + _("Could not establish the connection to the API."))
-        return response.json()["access_token"]
+    # def _choice_make_bearer_token():
+    #     self.ensure_one()
+    #     url = url_join('https://sandboxv2.choice.dev/api/v1/token')
+    #     payload = {"grant_type": "password", 
+    #                "username": choice_utils.get_choice_user_name,
+    #                "password": choice_utils.get_choice_password  
+    #                }
+    #     _logger.info("CHOICE MAKE BEARER TOEKN REQUEST PAYLOAD: " + payload)
+    #     try:
+    #         response = requests.request(method='POST', url=url, data=payload, headers=None, timeout=60)
+    #         # Choice can send 4XX errors for payment failures (not only for badly-formed requests).
+    #         # Check if an error code is present in the response content and raise only if not.
+    #         # See https://developers.choice.dev/#other-errors.
+    #         # If the request originates from an offline operation, don't raise to avoid a cursor
+    #         # rollback and return the response as-is for flow-specific handling.
+    #         if not response.ok \
+    #                 and 400 <= response.status_code < 500 \
+    #                 and response.json().get('error'):  # The 'code' entry is sometimes missing
+    #             try:
+    #                 response.raise_for_status()
+    #             except requests.exceptions.HTTPError:
+    #                 _logger.exception("invalid API request at %s with data %s", url, payload)
+    #                 error_msg = response.json().get('error', {}).get('message', '')
+    #                 raise ValidationError(
+    #                     "Choice: " + _(
+    #                         "The communication with the API failed.\n"
+    #                         "Choice gave us the following info about the problem:\n'%s'", error_msg
+    #                     )
+    #                 )
+    #     except requests.exceptions.ConnectionError:
+    #         _logger.exception("unable to reach endpoint at %s", url)
+    #         raise ValidationError("Choice: " + _("Could not establish the connection to the API."))
+    #     return response.json()["access_token"]
 
-    def _choice_make_request_bearer(
-        self, endpoint, payload=None, method='POST'
-    ):
-        """ Make a request to Choice API at the specified endpoint.
+    # def _choice_make_request_bearer(
+    #     self, endpoint, payload=None, method='POST'
+    # ):
+    #     """ Make a request to Choice API at the specified endpoint.
 
-        Note: self.ensure_one()
+    #     Note: self.ensure_one()
 
-        :param str endpoint: The endpoint to be reached by the request
-        :param dict payload: The payload of the request
-        :param str method: The HTTP method of the request
-        # :param bool offline: Whether the operation of the transaction being processed is 'offline'
-        # :param str idempotency_key: The idempotency key to pass in the request.
-        :return The JSON-formatted content of the response
-        :rtype: dict
-        :raise: ValidationError if an HTTP error occurs
-        """
-        self.ensure_one()
+    #     :param str endpoint: The endpoint to be reached by the request
+    #     :param dict payload: The payload of the request
+    #     :param str method: The HTTP method of the request
+    #     # :param bool offline: Whether the operation of the transaction being processed is 'offline'
+    #     # :param str idempotency_key: The idempotency key to pass in the request.
+    #     :return The JSON-formatted content of the response
+    #     :rtype: dict
+    #     :raise: ValidationError if an HTTP error occurs
+    #     """
+    #     self.ensure_one()
 
-        url = url_join('https://sandboxv2.choice.dev/api/v1/', endpoint)
-        headers = {
-            'AUTHORIZATION': f'Bearer {self._choice_make_bearer_token()}',
-            'content_type': 'application/json'
-        }
-        try:
-            response = requests.request(method, url, data=payload, headers=headers, timeout=60)
-            # Choice can send 4XX errors for payment failures (not only for badly-formed requests).
-            # Check if an error code is present in the response content and raise only if not.
-            # See https://developers.choice.dev/#other-errors.
-            # If the request originates from an offline operation, don't raise to avoid a cursor
-            # rollback and return the response as-is for flow-specific handling.
-            if not response.ok \
-                    and 400 <= response.status_code < 500 \
-                    and response.json().get('error'):  # The 'code' entry is sometimes missing
-                try:
-                    response.raise_for_status()
-                except requests.exceptions.HTTPError:
-                    _logger.exception("invalid API request at %s with data %s", url, payload)
-                    error_msg = response.json().get('error', {}).get('message', '')
-                    raise ValidationError(
-                        "Choice: " + _(
-                            "The communication with the API failed.\n"
-                            "Choice gave us the following info about the problem:\n'%s'", error_msg
-                        )
-                    )
-        except requests.exceptions.ConnectionError:
-            _logger.exception("unable to reach endpoint at %s", url)
-            raise ValidationError("Choice: " + _("Could not establish the connection to the API."))
-        return response.json()
+    #     url = url_join('https://sandboxv2.choice.dev/api/v1/', endpoint)
+    #     headers = {
+    #         'AUTHORIZATION': f'Bearer {self._choice_make_bearer_token()}',
+    #         'content_type': 'application/json'
+    #     }
+    #     try:
+    #         response = requests.request(method, url, data=payload, headers=headers, timeout=60)
+    #         # Choice can send 4XX errors for payment failures (not only for badly-formed requests).
+    #         # Check if an error code is present in the response content and raise only if not.
+    #         # See https://developers.choice.dev/#other-errors.
+    #         # If the request originates from an offline operation, don't raise to avoid a cursor
+    #         # rollback and return the response as-is for flow-specific handling.
+    #         if not response.ok \
+    #                 and 400 <= response.status_code < 500 \
+    #                 and response.json().get('error'):  # The 'code' entry is sometimes missing
+    #             try:
+    #                 response.raise_for_status()
+    #             except requests.exceptions.HTTPError:
+    #                 _logger.exception("invalid API request at %s with data %s", url, payload)
+    #                 error_msg = response.json().get('error', {}).get('message', '')
+    #                 raise ValidationError(
+    #                     "Choice: " + _(
+    #                         "The communication with the API failed.\n"
+    #                         "Choice gave us the following info about the problem:\n'%s'", error_msg
+    #                     )
+    #                 )
+    #     except requests.exceptions.ConnectionError:
+    #         _logger.exception("unable to reach endpoint at %s", url)
+    #         raise ValidationError("Choice: " + _("Could not establish the connection to the API."))
+    #     return response.json()
 
     
