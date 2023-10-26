@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payment_provider_form" model="ir.ui.view">
+        <field name="name">Choice Provider Form</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id" ref="payment.payment_provider_form"/>
+        <field name="arch" type="xml">
+            <group name="provider_credentials" position="inside">
+                <group attrs="{'invisible': [('code', '!=', 'choice')]}" name="choice_credentials">
+                    <field name="choice_user_name"           attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}"/>
+                    <field name="choice_password"           attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="True"/>
+                    <field name="choice_merch_guid"         attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="True"/>
+                    <field name="choice_device_cc_guid"     attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="True"/>
+                    <field name="choice_device_ach_guid"    attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="True"/>                    
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

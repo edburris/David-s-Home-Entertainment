@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="payment_provider_choice" model="payment.provider">
+        <field name="code">choice</field>
+        <field name="name">Choice</field>
+        <field name="display_as">Credit &amp; Debit Card</field>
+        <field name="company_id" ref="base.main_company" />
+        <field name="module_id" ref="base.module_payment_choice"/>
+        <field name="redirect_form_view_id" ref="redirect_form" />
+        <field name="payment_icon_ids"
+               eval="[(6, 0, [
+                   ref('payment.payment_icon_cc_mastercard'),
+                   ref('payment.payment_icon_cc_discover'),
+                   ref('payment.payment_icon_cc_american_express'),
+                   ref('payment.payment_icon_cc_visa'),
+               ])]"/>
+        <field name="pre_msg">
+            <![CDATA[
+            <p>You will be redirected to the Choice payment page after clicking on the payment button.</p>
+            ]]>
+        </field>
+    </record>
+    
+</odoo>
