@@ -77,7 +77,9 @@ class PaymentTransaction(models.Model):
             return res
         _logger.info("Choice _get_specific_rendering_values")
         base_url = self.provider_id.get_base_url()
-        
+        phone_number = "0000000000"
+        if self.partner_phone >= 10:
+            phone_number =  re.sub('[^0-9]', '', self.partner_phone)[2:]
         payload = {
                 "DeviceCreditCardGuid" : self.provider_id.choice_device_cc_guid,
                 "DeviceAchGuid": self.provider_id.choice_device_ach_guid,
@@ -93,7 +95,7 @@ class PaymentTransaction(models.Model):
                     {
                         "FirstName": self.partner_name.split(" ", 1)[0],
                         "LastName": self.partner_name.split(" ", 1)[1],
-                        "Phone": re.sub('[^0-9]', '', self.partner_phone)[2:] or "0000000000",
+                        "Phone": phone_number, #re.sub('[^0-9]', '', self.partner_phone)[2:] ,
                         "City": self.partner_city,
                         "Email": self.partner_email,
                         "Address1": self.partner_address,
