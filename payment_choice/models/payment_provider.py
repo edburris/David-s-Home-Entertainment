@@ -9,8 +9,6 @@ from werkzeug.urls import url_encode, url_join, url_parse
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-from odoo.addons.payment_choice import utils as choice_utils
-
 _logger = logging.getLogger(__name__)
 
 
