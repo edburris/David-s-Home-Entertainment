@@ -2,10 +2,8 @@
 import logging
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError, ValidationError
 from odoo.addons.payment import utils as payment_utils
 from werkzeug import urls
-from odoo.http import request
 
 
 
@@ -46,8 +44,6 @@ class AccountMove(models.Model):
             **self._get_additional_link_values(),
 
         }
-            # if payment_link.payment_provider_selection != 'all':
-            #     url_params['provider_id'] = str(payment_link.payment_provider_selection)
         return f'{base_url}/payment/pay?{urls.url_encode(url_params)}&invoice_id={self.id}'
 
     def action_register_payment_choice(self):
@@ -61,18 +57,3 @@ class AccountMove(models.Model):
             "url": link,
             "type": "ir.actions.act_url"
         }
-
-
-
-
-        # return {
-        #     'name': _('Register Choice Payment'),
-        #     'res_model': 'account.payment.register',
-        #     'view_mode': 'form',
-        #     'context': {
-        #         'active_model': 'account.move',
-        #         'active_ids': self.ids,
-        #     },
-        #     'target': 'new',
-        #     'type': 'ir.actions.act_window',
-        # }
