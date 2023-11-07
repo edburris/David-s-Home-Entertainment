@@ -5,7 +5,7 @@
     'version': '1.0',
     'category': 'Accounting/Payment Providers',
     'summary': "An American payment provider covering the US and many others.",
-    'depends': ['payment'],
+    'depends': ['payment', 'account'],
     'data': [
         'views/payment_provider_views.xml',
         'views/payment_choice_templates.xml',
