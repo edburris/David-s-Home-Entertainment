@@ -268,9 +268,9 @@ class PaymentTransaction(models.Model):
             'provider_id': self.provider_id.id,
             'payment_details': "BANK: " + notification_data['bankAccount']['accountNumberLastFour'],
             'partner_id': self.partner_id.id,
-            'provider_ref': notification_data['bankAccount']['guid'],
+            'provider_ref': notification_data['bankAccount']['customer']['guid'],
             'verified': True,
-            'choice_payment_method': payment_method_id,
+            'choice_payment_method': notification_data['bankAccount']['guid'],
              })
             self.write({
                 'token_id': token,
