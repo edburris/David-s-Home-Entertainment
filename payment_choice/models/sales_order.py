@@ -11,8 +11,8 @@ from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
-class AccountMove(models.Model): 
-    _inherit = 'account.move'
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
 
     def _get_access_token(self):
         self.ensure_one()
@@ -34,13 +34,13 @@ class AccountMove(models.Model):
             'company_id': self.company_id.id,
         }
     @api.depends(
-        'payment_reference', 'amount_total', 'currency_id', 'partner_id',
+        'name', 'amount_total', 'currency_id', 'partner_id',
     )
     def _compute_link(self):
        
         base_url = self.env.company.get_base_url()  # Don't generate links for the wrong website
         url_params = {
-            'reference': urls.url_quote(self.payment_reference),
+            'reference': urls.url_quote(self.name),
             'amount': self.amount_total,
             'access_token': self._get_access_token(),
             **self._get_additional_link_values(),
@@ -48,12 +48,19 @@ class AccountMove(models.Model):
         }
             # if payment_link.payment_provider_selection != 'all':
             #     url_params['provider_id'] = str(payment_link.payment_provider_selection)
-        return f'{base_url}/payment/pay?{urls.url_encode(url_params)}&invoice_id={self.id}'
+        return f'{base_url}/payment/pay?{urls.url_encode(url_params)}&sale_order_id={self.id}'
 
-    def action_register_payment_choice(self):
+
+    def sale_action_register_payment_choice(self):
         ''' Open the account.payment.register wizard to pay the selected journal entries.
         :return: An action opening the account.payment.register wizard.
         '''
+        self.ensure_one()
+
+        _logger.info("SELF REF: %s ", self.name)
+        _logger.info("SELF AMNT: %s", self.amount_total)
+        _logger.info("SELF PRTNR INV ID %s", self.partner_invoice_id)
+
         link = self._compute_link();
         _logger.info("PAYMENT LINK: " + link)
         _logger.info("SHOULD REDIRECT NOW")
@@ -61,18 +68,3 @@ class AccountMove(models.Model):
             "url": link,
             "type": "ir.actions.act_url"
         }
-
-
-
-
-        # return {
-        #     'name': _('Register Choice Payment'),
-        #     'res_model': 'account.payment.register',
-        #     'view_mode': 'form',
-        #     'context': {
-        #         'active_model': 'account.move',
-        #         'active_ids': self.ids,
-        #     },
-        #     'target': 'new',
-        #     'type': 'ir.actions.act_window',
-        # }

@@ -10,6 +10,8 @@ from odoo import _, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.http import request
 
+from odoo.addons.payment import utils as payment_utils
+from odoo.addons.payment_choice import utils as choice_utils
 from odoo.addons.payment_choice.const import SALES_URL, TOKEN_URL, HOSTED_PAYMENT_PAGE_REQUEST_URL, HOSTED_PAYMENT_PAGE_URL, RETURNS_URL, AUTHS_ONLY_URL, CAPTURES_URL, BANK_CLEARING_GET_URL
 
 _logger = logging.getLogger(__name__)
@@ -76,31 +78,19 @@ class PaymentTransaction(models.Model):
         if self.provider_code != 'choice':
             return res
         _logger.info("Choice _get_specific_rendering_values")
-        base_url = self.provider_id.get_base_url()
-        phone_number = "0000000000"
-        if self.partner_phone >= 10:
-            phone_number =  re.sub('[^0-9]', '', self.partner_phone)[2:]
+        base_url = "https://boar-open-totally.ngrok-free.app" #self.provider_id.get_base_url()
+        
         payload = {
                 "DeviceCreditCardGuid" : self.provider_id.choice_device_cc_guid,
                 "DeviceAchGuid": self.provider_id.choice_device_ach_guid,
                 "Merchantname": self.company_id.name,
-                "Description": f"{self.company_id.name} {self.reference} Payment", 
+                "Description": f"{self.company_id.name} {self.reference} Payment", #"TESTING DESCRIPTION", 
                 "Amount": float(self.amount),
                 "OtherURL": urls.url_join(base_url, "payment/choice/other" + '?reference=%s' % self.reference),
                 "SuccessURL": urls.url_join(base_url, "payment/choice/success"+ '?reference=%s' % self.reference),
                 "CancelURL": urls.url_join(base_url, "payment/choice/cancel" + '?reference=%s' % self.reference),
                 "OrderNumber": self.reference,
                 "OtherInfo": self.reference,
-                # "Customer":
-                #     {
-                #         "FirstName": self.partner_name.split(" ", 1)[0] or None,
-                #         "LastName": self.partner_name.split(" ", 1)[1] or None,
-                #         "Phone": phone_number, #re.sub('[^0-9]', '', self.partner_phone)[2:] ,
-                #         "City": self.partner_city or None,
-                #         "Email": self.partner_email or None,
-                #         "Address1": self.partner_address or None,
-                #         "Zip": self.partner_zip or None,
-                #     }
                 }
         _logger.info("********PAYLOAD: %s", payload)
 
@@ -248,7 +238,7 @@ class PaymentTransaction(models.Model):
             'AUTHORIZATION': f'Bearer {bearer_token}',
             'content_type': 'application/json'
         }
-        url = RETURNS_URL
+        url = RETURNS_URL #"https://sandbox.choice.dev/api/v1/returns"
         _logger.info("SEND REFUND REQUEST PAYLOAD: %s", payload);
         res = requests.post(url=url, headers=headers, json=payload)
         _logger.info(
@@ -327,7 +317,7 @@ class PaymentTransaction(models.Model):
                 }
         _logger.info("********PAYLOAD: %s", payload)
         
-        url = AUTHS_ONLY_URL
+        url = AUTHS_ONLY_URL #"https://sandbox.choice.dev/api/v1/AuthOnlys"
         bearer_token = self._get_choice_bearer_token()
         headers = {
             'AUTHORIZATION': f'Bearer {bearer_token}',
@@ -346,7 +336,7 @@ class PaymentTransaction(models.Model):
                 }
             _logger.info("********PAYLOAD: %s", payload)
             
-            url = CAPTURES_URL
+            url = CAPTURES_URL #"https://sandbox.choice.dev/api/v1/Captures"
             bearer_token = self._get_choice_bearer_token()
             headers = {
                 'AUTHORIZATION': f'Bearer {bearer_token}',
@@ -363,10 +353,12 @@ class PaymentTransaction(models.Model):
                 self._handle_notification_data('choice', response);
             else: 
                 raise UserError("Choice: " + _("There was an issue with processing your payment please contact the company for more information."))
-        
+        elif response['message']:
+            raise UserError("Choice: There has been an error processing your transaction: " + response['message'])
+
             
         else: 
-            raise UserError("Choice: " + _("The Auth Only Service Has Failed Please Try Again Later."))
+            raise UserError("Choice: " + _("There has been a processing the payment"))
 
 
 

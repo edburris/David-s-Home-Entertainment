@@ -1,10 +1,21 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import hashlib
+import hmac
+import json
 import logging
+import pprint
+from datetime import datetime
+import base64
 import werkzeug
 
 from odoo import http
+from odoo.exceptions import ValidationError
 from odoo.http import request
+from odoo.tools.misc import file_open
+
+from odoo.addons.payment import utils as payment_utils
+from odoo.addons.payment_choice import utils as choice_utils
 
 
 _logger = logging.getLogger(__name__)
@@ -35,6 +46,11 @@ class ChoiceController(http.Controller):
     def choice_redirect(self, **post):
         redirect_url = post.get('redirect_url')
         return werkzeug.utils.redirect(redirect_url)
+    
+
+    @http.route("/choice/invoice/payment/redirect", type="http", auth="public", csrf=False, save_session=False)
+    def redirect_invoice_to_payments_page(self, **data):
+        _logger.info("GOT TO REDIRECT INVOICE TO PAYMENT PAGE FUNCTION WITH REDIRECT URL: %s ", data);
    
 
 
