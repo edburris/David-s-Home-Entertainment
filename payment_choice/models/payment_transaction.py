@@ -197,13 +197,14 @@ class PaymentTransaction(models.Model):
             #     response = self._retrieve_choice_checkout_session_credit_card()
             if "settlementType" in notification_data and notification_data["settlementType"] == "ACH":
                 response = self._retrieve_choice_checkout_session_bank_clearing()
-            elif notification_data['paymentType'] == "Credit Card":
+            # elif notification_data['paymentType'] == "Credit Card":
+            elif "settlementType" not in notification_data:
                 response = self._retrieve_choice_checkout_session_credit_card()
            
 
             else:
                 _logger.error('CHOICE _process_notification_data paymentType Not Found: %s', notification_data['paymentType'])
-            
+                return;
             _logger.info('CHOICE _process_notification_data response: %s', response)
             session_state = response['status']
             self.write({
