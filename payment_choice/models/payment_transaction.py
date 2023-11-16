@@ -264,27 +264,27 @@ class PaymentTransaction(models.Model):
             _logger.warning("INIT_NOT_DATA %s", initial_notification_data)
 
 
-            # token = self.env['payment.token'].create({
-            # 'provider_id': self.provider_id.id,
-            # 'payment_details': notification_data['card']['last4'],
-            # 'partner_id': self.partner_id.id,
-            # 'provider_ref': notification_data['card']['customer']['guid'],
-            # 'verified': True,
-            # 'choice_payment_method': payment_method_id,
-            #  })
-            # self.write({
-            #     'token_id': token,
-            #     'tokenize': False,
-            # })
-            # _logger.info(
-            #     "created token with id %(token_id)s for partner with id %(partner_id)s from "
-            #     "transaction with reference %(ref)s",
-            #     {
-            #         'token_id': token.id,
-            #         'partner_id': self.partner_id.id,
-            #         'ref': self.reference,
-            #     },
-            # )
+            token = self.env['payment.token'].create({
+            'provider_id': self.provider_id.id,
+            'payment_details': "BANK: " + initial_notification_data['bankAccount']['accountNumberLastFour'],
+            'partner_id': self.partner_id.id,
+            'provider_ref': notification_data['bankAccount']['guid'],
+            'verified': True,
+            'choice_payment_method': payment_method_id,
+             })
+            self.write({
+                'token_id': token,
+                'tokenize': False,
+            })
+            _logger.info(
+                "created token with id %(token_id)s for partner with id %(partner_id)s from "
+                "transaction with reference %(ref)s",
+                {
+                    'token_id': token.id,
+                    'partner_id': self.partner_id.id,
+                    'ref': self.reference,
+                },
+            )
             return
 
         if self.operation == 'online_redirect':
