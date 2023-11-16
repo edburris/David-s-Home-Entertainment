@@ -5,6 +5,7 @@
     'version': '1.0',
     'category': 'Accounting/Payment Providers',
     'summary': "An American payment provider covering the US and many others.",
+    'description': "An American Payment Provider covering the US and many others.",
     'depends': ['payment', 'account', 'sale'],
     'author':"Meadowlark Technology Solutions LLC",
     'website': "https://meadowlarkts.com",
