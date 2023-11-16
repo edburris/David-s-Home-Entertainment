@@ -78,7 +78,7 @@ class PaymentTransaction(models.Model):
         if self.provider_code != 'choice':
             return res
         _logger.info("Choice _get_specific_rendering_values")
-        base_url = "https://boar-open-totally.ngrok-free.app" #self.provider_id.get_base_url()
+        base_url = self.provider_id.get_base_url()
         
         payload = {
                 "DeviceCreditCardGuid" : self.provider_id.choice_device_cc_guid,
