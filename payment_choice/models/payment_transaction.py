@@ -266,7 +266,7 @@ class PaymentTransaction(models.Model):
 
             token = self.env['payment.token'].create({
             'provider_id': self.provider_id.id,
-            'payment_details': "BANK: " + initial_notification_data['bankAccount']['accountNumberLastFour'],
+            'payment_details': "BANK: " + notification_data['bankAccount']['accountNumberLastFour'],
             'partner_id': self.partner_id.id,
             'provider_ref': notification_data['bankAccount']['guid'],
             'verified': True,
