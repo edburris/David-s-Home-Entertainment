@@ -351,7 +351,7 @@ class PaymentTransaction(models.Model):
             response = res.json()
             _logger.info("********SEND PAYMENT REQUEST...: %s", response)
             if response['status'] == "Transaction - Approved": 
-                tx = self.search([('reference', '=', response['CustomerData']), ('provider_code', '=', 'choice')])
+                tx = self.search([('reference', '=', response['customData']), ('provider_code', '=', 'choice')])
                 tx.write({'provider_reference': response['guid']})
                 self._handle_notification_data('choice', response);
             else: 
