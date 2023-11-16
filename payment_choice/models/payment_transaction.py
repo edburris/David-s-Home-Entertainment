@@ -12,7 +12,7 @@ from odoo.http import request
 
 from odoo.addons.payment import utils as payment_utils
 from odoo.addons.payment_choice import utils as choice_utils
-from odoo.addons.payment_choice.const import SALES_URL, TOKEN_URL, HOSTED_PAYMENT_PAGE_REQUEST_URL, HOSTED_PAYMENT_PAGE_URL, RETURNS_URL, AUTHS_ONLY_URL, CAPTURES_URL, BANK_CLEARING_GET_URL
+from odoo.addons.payment_choice.const import SALES_URL, TOKEN_URL, HOSTED_PAYMENT_PAGE_REQUEST_URL, HOSTED_PAYMENT_PAGE_URL, RETURNS_URL, AUTHS_ONLY_URL, CAPTURES_URL, BANK_CLEARING_GET_URL, BANK_CLEARING_CREATE
 
 _logger = logging.getLogger(__name__)
 
@@ -329,39 +329,17 @@ class PaymentTransaction(models.Model):
         if not self.token_id:
             raise UserError("Choice: " + _("The transaction is not linked to a token."))
         
-        payload = {
-                "DeviceGuid" : self.provider_id.choice_device_cc_guid,
+        if "BANK:" in self.payment_details: 
+            _logger.info("Running Stored ACH Payment")
+            payload = {
+                "DeviceGuid" : self.provider_id.choice_device_ach_guid,
                 "Amount": float(self.amount),
                 "OrderNumber":  self.reference,
-                "SendReceipt": False,
-                "CustomerData": self.reference,
-                "Card": {
-                    "CardNumber": self.token_id.choice_payment_method
+                "BankAccount": {
+                    "GUID": self.token_id.choice_payment_method
                 }
-
-                }
-        _logger.info("********PAYLOAD: %s", payload)
-        
-        url = AUTHS_ONLY_URL #"https://sandbox.choice.dev/api/v1/AuthOnlys"
-        bearer_token = self._get_choice_bearer_token()
-        headers = {
-            'AUTHORIZATION': f'Bearer {bearer_token}',
-            'content_type': 'application/json'
-        }
-        _logger.info("********HEADERS: %s", headers)
-
-        res = requests.post(url=url, headers=headers, json=payload)
-        response = res.json()
-        _logger.info("********SEND PAYMENT REQUEST...: %s", response)
-
-        if response['status'] == "Transaction - Approved": 
-            payload = {
-                "DeviceGuid" : self.provider_id.choice_device_cc_guid,
-                "AuthOnlyGuid": response['guid'],
-                }
-            _logger.info("********PAYLOAD: %s", payload)
-            
-            url = CAPTURES_URL #"https://sandbox.choice.dev/api/v1/Captures"
+            }
+            url = BANK_CLEARING_CREATE
             bearer_token = self._get_choice_bearer_token()
             headers = {
                 'AUTHORIZATION': f'Bearer {bearer_token}',
@@ -373,17 +351,69 @@ class PaymentTransaction(models.Model):
             response = res.json()
             _logger.info("********SEND PAYMENT REQUEST...: %s", response)
             if response['status'] == "Transaction - Approved": 
-                tx = self.search([('reference', '=', response['authOnly']['orderNumber']), ('provider_code', '=', 'choice')])
-                tx.write({'provider_reference': response['saleGuid']})
+                tx = self.search([('reference', '=', response['orderNumber']), ('provider_code', '=', 'choice')])
+                tx.write({'provider_reference': response['guid']})
                 self._handle_notification_data('choice', response);
             else: 
                 raise UserError("Choice: " + _("There was an issue with processing your payment please contact the company for more information."))
-        elif response['message']:
-            raise UserError("Choice: There has been an error processing your transaction: " + response['message'])
 
+        else:
+        
+            payload = {
+                "DeviceGuid" : self.provider_id.choice_device_cc_guid,
+                "Amount": float(self.amount),
+                "OrderNumber":  self.reference,
+                "SendReceipt": False,
+                "CustomerData": self.reference,
+                "Card": {
+                    "CardNumber": self.token_id.choice_payment_method
+                }
+            }
+            _logger.info("********PAYLOAD: %s", payload)
             
-        else: 
-            raise UserError("Choice: " + _("There has been a processing the payment"))
+            url = AUTHS_ONLY_URL #"https://sandbox.choice.dev/api/v1/AuthOnlys"
+            bearer_token = self._get_choice_bearer_token()
+            headers = {
+                'AUTHORIZATION': f'Bearer {bearer_token}',
+                'content_type': 'application/json'
+            }
+            _logger.info("********HEADERS: %s", headers)
+
+            res = requests.post(url=url, headers=headers, json=payload)
+            response = res.json()
+            _logger.info("********SEND PAYMENT REQUEST...: %s", response)
+            
+
+            if response['status'] == "Transaction - Approved": 
+                payload = {
+                    "DeviceGuid" : self.provider_id.choice_device_cc_guid,
+                    "AuthOnlyGuid": response['guid'],
+                    }
+                _logger.info("********PAYLOAD: %s", payload)
+                
+                url = CAPTURES_URL #"https://sandbox.choice.dev/api/v1/Captures"
+                bearer_token = self._get_choice_bearer_token()
+                headers = {
+                    'AUTHORIZATION': f'Bearer {bearer_token}',
+                    'content_type': 'application/json'
+                }
+                _logger.info("********HEADERS: %s", headers)
+
+                res = requests.post(url=url, headers=headers, json=payload)
+                response = res.json()
+                _logger.info("********SEND PAYMENT REQUEST...: %s", response)
+                if response['status'] == "Transaction - Approved": 
+                    tx = self.search([('reference', '=', response['authOnly']['orderNumber']), ('provider_code', '=', 'choice')])
+                    tx.write({'provider_reference': response['saleGuid']})
+                    self._handle_notification_data('choice', response);
+                else: 
+                    raise UserError("Choice: " + _("There was an issue with processing your payment please contact the company for more information."))
+            elif response['message']:
+                raise UserError("Choice: There has been an error processing your transaction: " + response['message'])
+
+                
+            else: 
+                raise UserError("Choice: " + _("There has been a processing the payment"))
 
 
 
