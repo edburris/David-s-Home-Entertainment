@@ -197,8 +197,10 @@ class PaymentTransaction(models.Model):
             #     response = self._retrieve_choice_checkout_session_credit_card()
             if "settlementType" in notification_data and notification_data["settlementType"] == "ACH":
                 response = self._retrieve_choice_checkout_session_bank_clearing()
+            elif "paymentType" in notification_data and notification_data["paymentType"] == "Ach":
+                response = self._retrieve_choice_checkout_session_bank_clearing()
             # elif notification_data['paymentType'] == "Credit Card":
-            elif "settlementType" not in notification_data:
+            elif "settlementType" not in notification_data and notification_data["paymentType"] != "Ach":
                 response = self._retrieve_choice_checkout_session_credit_card()
            
 
