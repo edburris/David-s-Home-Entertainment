@@ -329,7 +329,7 @@ class PaymentTransaction(models.Model):
         if not self.token_id:
             raise UserError("Choice: " + _("The transaction is not linked to a token."))
         
-        if "BANK:" in self.payment_details: 
+        if "BANK:" in self.token_id.payment_details: 
             _logger.info("Running Stored ACH Payment")
             payload = {
                 "DeviceGuid" : self.provider_id.choice_device_ach_guid,
