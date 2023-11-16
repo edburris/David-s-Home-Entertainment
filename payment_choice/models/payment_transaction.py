@@ -193,9 +193,9 @@ class PaymentTransaction(models.Model):
                 return
         else: 
             _logger.info("PROCESS NOTIFICATION DATA CHOICE: ONLINE_REDIRECT, ONLINE_TOKEN, OFFLINE")
-            if "status" in notification_data and ("paymentType" not in notification_data or "settlementType" not in notification_data) :
-                response = self._retrieve_choice_checkout_session_credit_card()
-            elif notification_data['paymentType'] == "Ach" or notification_data['settlementType'] == "ACH":
+            # if "status" in notification_data and ("paymentType" not in notification_data or "settlementType" not in notification_data) :
+            #     response = self._retrieve_choice_checkout_session_credit_card()
+            if notification_data['paymentType'] == "Ach" or notification_data['settlementType'] == "ACH":
                 response = self._retrieve_choice_checkout_session_bank_clearing()
             elif notification_data['paymentType'] == "Credit Card":
                 response = self._retrieve_choice_checkout_session_credit_card()
