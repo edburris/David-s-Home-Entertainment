@@ -50,6 +50,8 @@ class PaymentTransaction(models.Model):
         return response  # Return the complete response
 
     def _retrieve_choice_checkout_session_bank_clearing(self):
+        _logger.info(_("Choice API BANK CLEARING LOOKUP"))
+
         url = BANK_CLEARING_GET_URL
         bearer_token = self._get_choice_bearer_token()
         headers = {
