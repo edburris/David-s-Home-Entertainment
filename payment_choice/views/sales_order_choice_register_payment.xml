@@ -6,14 +6,15 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <header>
-                <!-- <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
+                <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment"
                     type="object" class="btn-primary"
-                    attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"/> -->
+                    attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"/>
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
-                    string="Regisiter Choice Payment DRAFT"
+                    string="Regisiter Choice Payment"
                     type="object" class="btn-primary"
-                    attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                    attrs="{'invisible': ['|',('invoice_status', 'is', 'no'), ('state', 'is', 'draft')]}"/>
+               
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment"
                     type="object" class="btn-primary"
