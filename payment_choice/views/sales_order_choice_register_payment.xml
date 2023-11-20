@@ -13,7 +13,15 @@
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment"
                     type="object" class="btn-primary"
+                    attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"/>
+                <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
+                    string="Regisiter Choice Payment"
+                    type="object" class="btn-primary"
                     attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/>
+                <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
+                    string="Regisiter Choice Payment"
+                    type="object" class="btn-primary"
+                    attrs="{'invisible': [('invoice_status', '=', 'draft')]}"/>
             </header>
         </field>
     </record>
