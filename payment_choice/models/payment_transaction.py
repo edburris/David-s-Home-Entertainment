@@ -205,7 +205,7 @@ class PaymentTransaction(models.Model):
            
 
             else:
-                _logger.error('CHOICE _process_notification_data paymentType Not Found: %s', notification_data['paymentType'])
+                _logger.error('Payment Type Can not be found... Payment type is not showing up as Credit, Debit, Or ACH. Please Contact Support')
                 return;
             _logger.info('CHOICE _process_notification_data response: %s', response)
             session_state = response['status']
