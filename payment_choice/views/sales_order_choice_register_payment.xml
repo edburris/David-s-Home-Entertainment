@@ -13,7 +13,7 @@
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment DRAFT"
                     type="object" class="btn-primary"
-                    attrs="{'invisible': ['|', ('state', 'not in', 'done')]}"/>
+                    attrs="{'invisible': ['|', ('state', '!=', 'done')]}"/>
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment"
                     type="object" class="btn-primary"
