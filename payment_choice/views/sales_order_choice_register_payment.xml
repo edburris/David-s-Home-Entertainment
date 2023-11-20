@@ -6,22 +6,18 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <header>
-                <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
+                <!-- <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment 1"
                     type="object" class="btn-primary"
                     attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"/>
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment 2"
                     type="object" class="btn-primary"
-                    attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"/>
-                <!-- <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
-                    string="Regisiter Choice Payment 3"
-                    type="object" class="btn-primary"
-                    attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/> -->
+                    attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"/> -->
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment 4"
                     type="object" class="btn-primary"
-                    attrs="{'invisible': [('state', '=', ['draft','sent'])]}"/>
+                    attrs="{'invisible': ['|',('invoice_status', '!=', 'no'),('state', '!=', ['sale','draft','sent'])]}"/>
             </header>
         </field>
     </record>
