@@ -21,7 +21,7 @@
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment 4"
                     type="object" class="btn-primary"
-                    attrs="{'invisible': [('invoice_status', '=', ['draft','sent'])]}"/>
+                    attrs="{'invisible': [('state', '=', ['draft','sent'])]}"/>
             </header>
         </field>
     </record>
