@@ -13,11 +13,7 @@
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment"
                     type="object" class="btn-primary"
-                    attrs="{'invisible': ['|', ('state', '==', 'draft')]}"/>
-                <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
-                    string="Regisiter Choice Payment"
-                    type="object" class="btn-primary"
-                    attrs="{'invisible': ['|', ('state', '==', 'sent')]}"/>
+                    attrs="{'invisible': ['|', ('state', '!=', 'sale')]}"/>
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
                     string="Regisiter Choice Payment"
                     type="object" class="btn-primary"
