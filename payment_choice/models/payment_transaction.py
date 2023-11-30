@@ -83,7 +83,7 @@ class PaymentTransaction(models.Model):
 
         base_url = self.provider_id.get_base_url()
         account_move_sudo = self.env['account.move'].sudo().search([('reference', '=', self.reference), ('provider_code', '=', 'choice')]);
-        _logger.info("********ACCOUNT_MOVE_SUDO: %s", account_move_sudo.id]);
+        _logger.info("********ACCOUNT_MOVE_SUDO: %s", account_move_sudo.id);
 
 
         
