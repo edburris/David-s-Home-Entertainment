@@ -220,6 +220,8 @@ class PaymentTransaction(models.Model):
             else:
                 _logger.info('Choice payment for tx %s: set as DONE' % (self.reference))
                 if self.tokenize:
+                    _logger.info("Choice Payment Tokenization Area........");
+                    _logger.info("Choice Payment Tokenization Partner ID: %s", self.partner_id.id);
                     self._choice_tokenize_from_notification_data(response, notification_data)
                 self._set_done()
         else:
