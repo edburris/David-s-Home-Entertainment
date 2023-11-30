@@ -221,7 +221,7 @@ class PaymentTransaction(models.Model):
             else:
                 _logger.info('Choice payment for tx %s: set as DONE' % (self.reference))
                 if self.tokenize:
-                    account_move_sudo = self.env['account.move'].sudo().search([("ref", "=", self.reference)]);
+                    account_move_sudo = self.env['account.move'].sudo().search([("description", "=", self.reference)]);
 
                     _logger.info("Choice Payment Tokenization Area........");
                     _logger.info("Choice Payment Tokenization Partner ID: %s", account_move_sudo.partner_id.id);
