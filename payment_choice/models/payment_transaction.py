@@ -82,6 +82,10 @@ class PaymentTransaction(models.Model):
         _logger.info("Choice _get_specific_rendering_values")
 
         base_url = self.provider_id.get_base_url()
+        account_move_sudo = self.env['account.move'].sudo().search([('reference', '=', self.reference), ('provider_code', '=', 'choice')]);
+        _logger.info("********ACCOUNT_MOVE_SUDO: %s", account_move_sudo.id]);
+
+
         
         payload = {
                 "DeviceCreditCardGuid" : self.provider_id.choice_device_cc_guid,
@@ -221,11 +225,8 @@ class PaymentTransaction(models.Model):
             else:
                 _logger.info('Choice payment for tx %s: set as DONE' % (self.reference))
                 if self.tokenize:
-                    account_move_sudo = self.env['account.move'].sudo().search([("payment_reference", "=", self.reference)]);
-
                     _logger.info("Choice Payment Tokenization Area........");
-                    _logger.info("Choice Payment Tokenization Partner ID: %s", account_move_sudo.partner_id.id);
-                    ##### self._choice_tokenize_from_notification_data(response, notification_data)
+                    self._choice_tokenize_from_notification_data(response, notification_data)
                 self._set_done()
         else:
             msg = 'Received unrecognized response for Choice Payment %s, set as error' % (response['status'])
