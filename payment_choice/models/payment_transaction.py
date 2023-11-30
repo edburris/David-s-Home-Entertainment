@@ -80,7 +80,7 @@ class PaymentTransaction(models.Model):
         if self.provider_code != 'choice':
             return res
         _logger.info("Choice _get_specific_rendering_values")
-        _logger.info("Choice partner_id %s", self.company_id.id);
+        _logger.info("Choice partner_id %s", self.partner_name);
 
         base_url = self.provider_id.get_base_url()
         
