@@ -82,6 +82,7 @@ class PaymentTransaction(models.Model):
         _logger.info("Choice _get_specific_rendering_values")
 
         base_url = self.provider_id.get_base_url()
+        _logger.info("!!!!!!! %s", processing_values);
         account_move_sudo = self.env['account.move'].sudo().search([('ref', '=', processing_values.reference)]);
         _logger.info("********ACCOUNT_MOVE_SUDO: %s", account_move_sudo.id);
 
