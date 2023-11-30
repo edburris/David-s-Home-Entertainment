@@ -80,7 +80,6 @@ class PaymentTransaction(models.Model):
         if self.provider_code != 'choice':
             return res
         _logger.info("Choice _get_specific_rendering_values")
-        _logger.info("Choice partner_id %s", self.partner_name);
 
         base_url = self.provider_id.get_base_url()
         
@@ -222,11 +221,11 @@ class PaymentTransaction(models.Model):
             else:
                 _logger.info('Choice payment for tx %s: set as DONE' % (self.reference))
                 if self.tokenize:
-                    tx_sudo = self.sudo().search([('reference', '=', self.reference)])
+                    account_move_sudo = self.env['account.move'].sudo().search([("ref", "=", self.reference)]);
 
                     _logger.info("Choice Payment Tokenization Area........");
-                    _logger.info("Choice Payment Tokenization Partner ID: %s", tx_sudo.partner_id.id);
-                    # self._choice_tokenize_from_notification_data(response, notification_data)
+                    _logger.info("Choice Payment Tokenization Partner ID: %s", account_move_sudo.partner_id.id);
+                    ##### self._choice_tokenize_from_notification_data(response, notification_data)
                 self._set_done()
         else:
             msg = 'Received unrecognized response for Choice Payment %s, set as error' % (response['status'])
