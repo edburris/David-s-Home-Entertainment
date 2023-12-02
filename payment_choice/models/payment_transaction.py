@@ -81,7 +81,7 @@ class PaymentTransaction(models.Model):
             return res
         _logger.info("Choice _get_specific_rendering_values")
 
-        testReturn = self.env['account.move'].sudo().search(['name', 'ilike', 'self.reference'],limit=1)
+        testReturn = self.env['account.move'].sudo().search(domain=['name', 'ilike', self.reference],limit=1)
         _logger.info("TEST RETURN %s", testReturn)
 
         base_url = self.provider_id.get_base_url()
