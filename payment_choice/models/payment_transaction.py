@@ -81,6 +81,9 @@ class PaymentTransaction(models.Model):
             return res
         _logger.info("Choice _get_specific_rendering_values")
 
+         testReturn = self.env['account_move'].sudo().search(['name', 'ilike', 'self.reference'],limit=1)
+        _logger.info("TEST RETURN %s", testReturn)
+
         base_url = self.provider_id.get_base_url()
                 
         payload = {
@@ -222,8 +225,6 @@ class PaymentTransaction(models.Model):
                 _logger.info('Choice payment for tx %s: set as DONE' % (self.reference))
                 if self.tokenize:
                     _logger.info("Choice Payment Tokenization Area........")
-                    testReturn = self.env['account_move'].sudo().search(['name', 'ilike', 'self.reference'],limit=1)
-                    _logger.info("TEST RETURN %s", testReturn)
                     # self._choice_tokenize_from_notification_data(response, notification_data)
                 self._set_done()
         else:
