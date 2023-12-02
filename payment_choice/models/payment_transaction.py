@@ -228,7 +228,7 @@ class PaymentTransaction(models.Model):
                     if testReturn.name is not False:
                         _logger.info("Was able to find partner_id from account move: %s", testReturn.partner_id.id)
                     elif salesTestReturn.name is not False:
-                        _logger.info("Was able to find partner_id from sales order: %s", testReturn.partner_id.id)
+                        _logger.info("Was able to find partner_id from sales order: %s", salesTestReturn.partner_id.id)
                     else:
                         _logger.info("Could Not Find Partner_id from account move or sales order")
                     _logger.info("TEST RETURN %s", testReturn.partner_id.id)
