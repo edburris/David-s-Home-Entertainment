@@ -222,7 +222,6 @@ class PaymentTransaction(models.Model):
                 _logger.info('Choice payment for tx %s: set as DONE' % (self.reference))
                 if self.tokenize:
                     _logger.info("Choice Payment Tokenization Area........")
-                    
                     self._choice_tokenize_from_notification_data(response, notification_data)
                 self._set_done()
         else:
@@ -282,14 +281,11 @@ class PaymentTransaction(models.Model):
 
         if payment_method == "Ach":
             _logger.warning("Requested Tokenization Of Non Recurring Payment Method")
-            _logger.warning("NOT_DATA %s", notification_data)
-            _logger.warning("INIT_NOT_DATA %s", initial_notification_data)
-
 
             token = self.env['payment.token'].create({
             'provider_id': self.provider_id.id,
             'payment_details': "BANK: " + notification_data['bankAccount']['accountNumberLastFour'],
-            'partner_id': self.partner_id.id,
+            'partner_id': partner_id_from_invoice, #self.partner_id.id,
             'provider_ref': notification_data['bankAccount']['customer']['guid'],
             'verified': True,
             'choice_payment_method': notification_data['bankAccount']['guid'],
@@ -303,7 +299,7 @@ class PaymentTransaction(models.Model):
                 "transaction with reference %(ref)s",
                 {
                     'token_id': token.id,
-                    'partner_id': self.partner_id.id,
+                    'partner_id': partner_id_from_invoice, #self.partner_id.id,
                     'ref': self.reference,
                 },
             )
