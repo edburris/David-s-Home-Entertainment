@@ -226,7 +226,7 @@ class PaymentTransaction(models.Model):
                     _logger.info("Choice Payment Tokenization Area........ %s", notification_data['otherInfo'].split('-')[0])
 
 
-                    testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', notification_data['otherInfo'])], limit=1)
+                    testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
                     _logger.info("TEST RETURN %s", testReturn.partner_id)
                     # self._choice_tokenize_from_notification_data(response, notification_data)
                 self._set_done()
