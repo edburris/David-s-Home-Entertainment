@@ -225,9 +225,9 @@ class PaymentTransaction(models.Model):
                     _logger.info("Choice Payment Tokenization Area........ %s", notification_data['otherInfo'].split('-')[0])
                     testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
                     salesTestReturn = self.env['sale.order'].sudo().search([('name', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
-                    if testReturn is not None:
+                    if testReturn.name is not False:
                         _logger.info("Was able to find partner_id from account move: %s", testReturn.partner_id)
-                    elif salesTestReturn is not None:
+                    elif salesTestReturn.name is not False:
                         _logger.info("Was able to find partner_id from sales order: %s", testReturn.partner_id)
                     else:
                         _logger.info("Could Not Find Partner_id from account move or sales order")
