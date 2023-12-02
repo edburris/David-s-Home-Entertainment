@@ -222,17 +222,8 @@ class PaymentTransaction(models.Model):
                 _logger.info('Choice payment for tx %s: set as DONE' % (self.reference))
                 if self.tokenize:
                     _logger.info("Choice Payment Tokenization Area........")
-                    _logger.info("Choice Payment Tokenization Area........ %s", notification_data['otherInfo'].split('-')[0])
-                    testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
-                    salesTestReturn = self.env['sale.order'].sudo().search([('name', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
-                    if testReturn.name is not False:
-                        _logger.info("Was able to find partner_id from account move: %s", testReturn.partner_id.id)
-                    elif salesTestReturn.name is not False:
-                        _logger.info("Was able to find partner_id from sales order: %s", salesTestReturn.partner_id.id)
-                    else:
-                        _logger.info("Could Not Find Partner_id from account move or sales order")
-                    _logger.info("TEST RETURN %s", testReturn.partner_id.id)
-                    # self._choice_tokenize_from_notification_data(response, notification_data)
+                    
+                    self._choice_tokenize_from_notification_data(response, notification_data)
                 self._set_done()
         else:
             msg = 'Received unrecognized response for Choice Payment %s, set as error' % (response['status'])
@@ -276,6 +267,19 @@ class PaymentTransaction(models.Model):
         :return: None
         """
         payment_method = initial_notification_data['paymentType']
+        partner_id_from_invoice = self.partner_id.id
+        _logger.info("Choice Payment Tokenization Area........ %s", notification_data['otherInfo'].split('-')[0])
+        testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
+        salesTestReturn = self.env['sale.order'].sudo().search([('name', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
+        if testReturn.name is not False:
+            _logger.info("Was able to find partner_id from account move: %s", testReturn.partner_id.id)
+            partner_id_from_invoice = testReturn.partner_id.id
+        elif salesTestReturn.name is not False:
+            _logger.info("Was able to find partner_id from sales order: %s", salesTestReturn.partner_id.id)
+            partner_id_from_invoice = salesTestReturn.partner_id.id
+        else:
+            _logger.info("Could Not Find Partner_id from account move or sales order")
+
         if payment_method == "Ach":
             _logger.warning("Requested Tokenization Of Non Recurring Payment Method")
             _logger.warning("NOT_DATA %s", notification_data)
@@ -313,7 +317,7 @@ class PaymentTransaction(models.Model):
         token = self.env['payment.token'].create({
             'provider_id': self.provider_id.id,
             'payment_details': notification_data['card']['last4'],
-            'partner_id': self.partner_id.id,
+            'partner_id': partner_id_from_invoice, #self.partner_id.id,
             'provider_ref': notification_data['card']['customer']['guid'],
             'verified': True,
             'choice_payment_method': payment_method_id,
@@ -327,7 +331,7 @@ class PaymentTransaction(models.Model):
             "transaction with reference %(ref)s",
             {
                 'token_id': token.id,
-                'partner_id': self.partner_id.id,
+                'partner_id': partner_id_from_invoice, #self.partner_id.id,
                 'ref': self.reference,
             },
         )
