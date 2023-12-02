@@ -223,7 +223,7 @@ class PaymentTransaction(models.Model):
                 if self.tokenize:
                     _logger.info("Choice Payment Tokenization Area........")
                     _logger.info("Choice Payment Tokenization Area........ %s", notification_data['otherInfo'])
-                    _logger.info("Choice Payment Tokenization Area........ %s", notification_data['otherInfo'].split('-')[1])
+                    _logger.info("Choice Payment Tokenization Area........ %s", notification_data['otherInfo'].split('-')[0])
 
 
                     testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', notification_data['otherInfo'])], limit=1)
