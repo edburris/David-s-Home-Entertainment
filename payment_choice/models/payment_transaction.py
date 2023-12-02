@@ -267,9 +267,9 @@ class PaymentTransaction(models.Model):
         """
         payment_method = initial_notification_data['paymentType']
         partner_id_from_invoice = self.partner_id.id
-        _logger.info("Choice Payment Tokenization Area........ %s", notification_data['otherInfo'].split('-')[0])
-        testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
-        salesTestReturn = self.env['sale.order'].sudo().search([('name', 'ilike', notification_data['otherInfo'].split('-')[0])], limit=1)
+        _logger.info("Choice Payment Tokenization Area........ %s", initial_notification_data['otherInfo'].split('-')[0])
+        testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', initial_notification_data['otherInfo'].split('-')[0])], limit=1)
+        salesTestReturn = self.env['sale.order'].sudo().search([('name', 'ilike', initial_notification_data['otherInfo'].split('-')[0])], limit=1)
         if testReturn.name is not False:
             _logger.info("Was able to find partner_id from account move: %s", testReturn.partner_id.id)
             partner_id_from_invoice = testReturn.partner_id.id
