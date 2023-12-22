@@ -379,7 +379,7 @@ class PaymentTransaction(models.Model):
             payload = {
                 "DeviceGuid" : self.provider_id.choice_device_cc_guid,
                 "Amount": float(self.amount),
-                "OrderNumber":  self.reference,
+                "OrderNumber":  self.reference[:20],
                 "SendReceipt": False,
                 "CustomerData": self.reference,
                 "Card": {
@@ -425,8 +425,8 @@ class PaymentTransaction(models.Model):
                     self._handle_notification_data('choice', response);
                 else: 
                     raise UserError("Choice: " + _("There was an issue with processing your payment please contact the company for more information."))
-            elif response['message']:
-                raise UserError("Choice: There has been an error processing your transaction: " + response['message'])
+            elif response['errors']:
+                raise UserError("Choice: There has been an error processing your transaction: " + response['errors'])
 
                 
             else: 
