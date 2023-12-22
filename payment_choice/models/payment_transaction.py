@@ -209,9 +209,12 @@ class PaymentTransaction(models.Model):
                 _logger.error('Payment Type Can not be found... Payment type is not showing up as Credit, Debit, Or ACH. Please Contact Support')
                 return;
             _logger.info('CHOICE _process_notification_data response: %s', response)
+            reference_id = notification_data['otherInfo'].split('-')[0]
+            partner_id_from_invoice = self.__get_partner_id_from_invoice(reference_id) #get the customer ID from the invoice
             session_state = response['status']
             self.write({
-                'source_transaction_id': response['refNumber']
+                'source_transaction_id': response['refNumber'],
+                'partner_id': partner_id_from_invoice
             })
 
         if session_state == 'Transaction - Approved':
@@ -269,17 +272,7 @@ class PaymentTransaction(models.Model):
         partner_id_from_invoice = self.partner_id.id
         _logger.info("Choice Payment Tokenization Area........ %s", initial_notification_data['otherInfo'].split('-')[0])
         reference_id = initial_notification_data['otherInfo'].split('-')[0]
-        partner_id_from_invoice = self.__get_partner_id_from_invoice(reference_id)
-        # testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', initial_notification_data['otherInfo'].split('-')[0])], limit=1)
-        # salesTestReturn = self.env['sale.order'].sudo().search([('name', 'ilike', initial_notification_data['otherInfo'].split('-')[0])], limit=1)
-        # if testReturn.name is not False:
-        #     _logger.info("Was able to find partner_id from account move: %s", testReturn.partner_id.id)
-        #     partner_id_from_invoice = testReturn.partner_id.id
-        # elif salesTestReturn.name is not False:
-        #     _logger.info("Was able to find partner_id from sales order: %s", salesTestReturn.partner_id.id)
-        #     partner_id_from_invoice = salesTestReturn.partner_id.id
-        # else:
-        #     _logger.info("Could Not Find Partner_id from account move or sales order")
+        partner_id_from_invoice = self.__get_partner_id_from_invoice(reference_id) #get the customer ID from the invoice
 
         if payment_method == "Ach":
             _logger.warning("Requested Tokenization Of Non Recurring Payment Method")
