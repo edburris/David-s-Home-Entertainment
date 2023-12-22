@@ -212,7 +212,7 @@ class PaymentTransaction(models.Model):
             if "authOnly" in notification_data:
                 reference_id = notification_data['authOnly']['orderNumber'].split('-')[0]
             else:
-                reference_id = notification_data['orderNumber'].split('-')[0]
+                reference_id = notification_data['otherInfo'].split('-')[0]
 
             partner_id_from_invoice = self.__get_partner_id_from_invoice(reference_id) #get the customer ID from the invoice
             session_state = response['status']
