@@ -269,7 +269,7 @@ class PaymentTransaction(models.Model):
         partner_id_from_invoice = self.partner_id.id
         _logger.info("Choice Payment Tokenization Area........ %s", initial_notification_data['otherInfo'].split('-')[0])
         reference_id = initial_notification_data['otherInfo'].split('-')[0]
-        partner_id_from_invoice = self.get_partner_id_from_invoice(reference_id)
+        partner_id_from_invoice = self.__get_partner_id_from_invoice(reference_id)
         # testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', initial_notification_data['otherInfo'].split('-')[0])], limit=1)
         # salesTestReturn = self.env['sale.order'].sudo().search([('name', 'ilike', initial_notification_data['otherInfo'].split('-')[0])], limit=1)
         # if testReturn.name is not False:
@@ -435,7 +435,7 @@ class PaymentTransaction(models.Model):
             else: 
                 raise UserError("Choice: " + _("There has been a processing the payment"))
 
-    def get_partner_id_from_invoice(payment_ref):
+    def __get_partner_id_from_invoice(self, payment_ref):
         testReturn = self.env['account.move'].sudo().search([('payment_reference', 'ilike', payment_ref)], limit=1)
         salesTestReturn = self.env['sale.order'].sudo().search([('name', 'ilike', payment_ref)], limit=1)
 
