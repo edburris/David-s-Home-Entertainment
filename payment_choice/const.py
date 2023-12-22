@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2023 Meadowlark Technology Solutions LLC
+#
+# Author: Meadowlark Technology Solutions LLC
+#
+# Released under the GNU General Public License
+#
+
 BASE_URL = "https://sandbox.choice.dev/api/v1/"
 WEB_PORTAL_URL = "https://webportalsandbox.choice.dev/"
 SALES_URL = BASE_URL + "sales/"

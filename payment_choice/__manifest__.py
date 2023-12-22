@@ -1,4 +1,11 @@
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2023 Meadowlark Technology Solutions LLC
+#
+# Author: Meadowlark Technology Solutions LLC
+#
+# Released under the GNU General Public License
+#
 
 {
     'name': 'Payment Provider: Choice',
@@ -8,7 +15,6 @@
     'description': "An American Payment Provider covering the US and many others.",
     'depends': ['payment', 'account', 'sale'],
     'author':"Meadowlark Technology Solutions LLC",
-    'website': "https://meadowlarkts.com",
 
     'data': [
         'views/payment_provider_views.xml',
