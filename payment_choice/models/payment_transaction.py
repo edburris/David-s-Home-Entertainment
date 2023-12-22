@@ -209,7 +209,7 @@ class PaymentTransaction(models.Model):
                 _logger.error('Payment Type Can not be found... Payment type is not showing up as Credit, Debit, Or ACH. Please Contact Support')
                 return;
             _logger.info('CHOICE _process_notification_data response: %s', response)
-            if "autoOnly" in notification_data:
+            if "authOnly" in notification_data:
                 reference_id = notification_data['authOnly']['orderNumber'].split('-')[0]
             else:
                 reference_id = notification_data['orderNumber'].split('-')[0]
