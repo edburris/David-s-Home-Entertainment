@@ -209,7 +209,7 @@ class PaymentTransaction(models.Model):
                 _logger.error('Payment Type Can not be found... Payment type is not showing up as Credit, Debit, Or ACH. Please Contact Support')
                 return;
             _logger.info('CHOICE _process_notification_data response: %s', response)
-            reference_id = notification_data['otherInfo'].split('-')[0]
+            reference_id = notification_data['orderNumber'].split('-')[0]
             partner_id_from_invoice = self.__get_partner_id_from_invoice(reference_id) #get the customer ID from the invoice
             session_state = response['status']
             self.write({
