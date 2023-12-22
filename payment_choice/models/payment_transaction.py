@@ -375,7 +375,7 @@ class PaymentTransaction(models.Model):
                 raise UserError("Choice: " + _("There was an issue with processing your payment please contact the company for more information."))
 
         else:
-        
+            _logger.info("__________ %s", self.reference)
             payload = {
                 "DeviceGuid" : self.provider_id.choice_device_cc_guid,
                 "Amount": float(self.amount),
