@@ -21,7 +21,7 @@
             </header>
             <xpath expr="//div[@class='oe_button_box']" position="inside">
                 <div class="badge rounded-pill text-bg-secondary fs-6 border-0" style="margin-left:.5rem; margin-right:.5rem;"
-                 attrs="{'invisible': ['|', ('amount_paid', '>=', 'amount_total') ] }">
+                 attrs="{'invisible': ['|', ('amount_invoiced', '>=', 'amount_total') ] }">
                     In Payment
                 </div>
             </xpath>
