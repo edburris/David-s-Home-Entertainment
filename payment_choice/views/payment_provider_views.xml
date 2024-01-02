@@ -10,9 +10,9 @@
                 <group attrs="{'invisible': [('code', '!=', 'choice')]}" name="choice_credentials">
                     <field name="choice_user_name"           attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}"/>
                     <field name="choice_password"           attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="True"/>
-                    <field name="choice_merch_guid"         attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="True"/>
-                    <field name="choice_device_cc_guid"     attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="True"/>
-                    <field name="choice_device_ach_guid"    attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="True"/>                    
+                    <field name="choice_merch_guid"         attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="False"/>
+                    <field name="choice_device_cc_guid"     attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="False"/>
+                    <field name="choice_device_ach_guid"    attrs="{'required':[('code', '=', 'choice'), ('state', '!=', 'disabled')]}" password="False"/>                    
                 </group>
             </group>
         </field>
