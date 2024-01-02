@@ -12,7 +12,7 @@
                     attrs="{'invisible': ['|', ('amount_invoiced', '>=', 'amount_total'), ('invoice_status', '!=', 'no'), ('state', 'not in', ['sale','draft','sent']) ] }"/>
             </header>
             <xpath expr="//div[@class='oe_button_box']" position="inside">
-                <div class="badge rounded-pill text-bg-secondary fs-6 border-0" style="margin-left:.5rem; margin-right:.5rem;"
+                <div class="badge rounded-pill text-bg-secondary fs-6 border-0" style="margin-left:.5rem; margin-right:.5rem;">
                     In Payment
                 </div>
             </xpath>
