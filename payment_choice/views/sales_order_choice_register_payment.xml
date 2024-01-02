@@ -20,8 +20,7 @@
                     attrs="{'invisible': ['|', ('invoice_status', '!=', 'no'), ('state', 'not in', ['sale','draft','sent']) ] }"/>
             </header>
             <xpath expr="//div[@class='oe_button_box']" position="inside">
-                <div class="badge rounded-pill text-bg-secondary float-end fs-6 border-0"
-                    attrs="{'invisible': ['|', ('invoice_status', '!=', 'no'), ('state', 'not in', ['sale','draft','sent']) ] }">
+                <div class="badge rounded-pill text-bg-secondary float-end fs-6 border-0">
                     In Payment
                 </div>
             </xpath>
