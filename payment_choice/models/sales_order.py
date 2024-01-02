@@ -22,7 +22,6 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    _logger.info(self.authorized_transaction_ids)
     def _get_access_token(self):
         self.ensure_one()
         return payment_utils.generate_access_token(
