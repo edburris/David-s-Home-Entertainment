@@ -4,7 +4,6 @@
         <field name="name">sale.order.form</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="choice_payment_made" invisible="0"/>'
         <field name="arch" type="xml">
             <header>
                 <button id="sales_action_register_payment_choice_btn" name="sale_action_register_payment_choice"
@@ -13,6 +12,7 @@
                     attrs="{'invisible': ['|', ('invoice_status', '!=', 'no'), ('state', 'not in', ['sale','draft','sent']) ] }"/>
             </header>
             <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <field name="choice_payment_made" invisible="0"/>'
 
                 <button class="btn oe_stat_button btn-light flex-shrink-0 mb-0 py-0 border-0 border-start border-bottom rounded-0 text-capitalize"
                 type="object"
