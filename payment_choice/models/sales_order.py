@@ -80,7 +80,9 @@ class SaleOrder(models.Model):
     
     def change_choice_payment_made(self):
         self.ensure_one()
-        _logger.info("Choice Payment Made: %s ", self.choice_payment_made)
+        _logger.info("BEFORE: Choice Payment Made: %s ", self.choice_payment_made)
         self.write({
             'choice_payment_made': not self.choice_payment_made
         })
+        _logger.info("AFTER: Choice Payment Made: %s ", self.choice_payment_made)
+
