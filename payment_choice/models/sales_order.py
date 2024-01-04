@@ -21,6 +21,7 @@ _logger = logging.getLogger(__name__)
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
+    choice_payment_made = fields.Boolean(string="Choice Payment Made", default=False);
 
     def _get_access_token(self):
         self.ensure_one()
@@ -76,3 +77,10 @@ class SaleOrder(models.Model):
             "url": link,
             "type": "ir.actions.act_url"
         }
+    
+    def change_choice_payment_made(self):
+        self.ensure_one()
+        _logger.info("Choice Payment Made: %s ", self.choice_payment_made)
+        self.write({
+            'choice_payment_made': not self.choice_payment_made
+        })
