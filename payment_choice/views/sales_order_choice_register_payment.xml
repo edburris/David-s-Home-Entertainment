@@ -13,11 +13,11 @@
             </header>
             <xpath expr="//div[@class='oe_button_box']" position="inside">
                 <button class="btn oe_stat_button btn-light flex-shrink-0 mb-0 py-0 border-0 border-start border-bottom rounded-0 text-capitalize"
-                
+                type="object"
+                id="change_choice_payment_made_btn"
                 name="change_choice_payment_made"
                 string="Payment Made">
                     <i class="fa fa-fw o_button_icon fa-credit-card icon"></i>
-
                     <div class="o_field_widget o_stat_info" style="margin-top:.15rem;">
                         <span class="o_stat_text"> Payment</span>
                         <span class="o_stat_text"> Made</span>
