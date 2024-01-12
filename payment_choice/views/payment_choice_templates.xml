@@ -4,13 +4,5 @@
     <template id="redirect_form">
         <form t-att-action="api_url" method="post" />
     </template>
-    <template id="payment.submit_button" name="Login Button">
-      <button name="o_payment_submit_button"
-                type="button"
-                string="Login"
-                class="btn btn-primary w-100 w-md-auto ms-auto px-5"
-                disabled="false"
-        />
-     </template>
 
 </odoo>
