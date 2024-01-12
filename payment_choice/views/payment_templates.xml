@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- <template id="checkout" inherit_id="payment.checkout">
-        
-    </template>
-
-    <template id="manage" inherit_id="payment.manage">
-        
-    </template> -->
+     <template id="payment.submit_button" name="Login Button">
+      <button name="o_payment_login_button"
+                type="button"
+                string="Login"
+                class="btn btn-primary w-100 w-md-auto ms-auto px-5"
+                disabled="false"
+        />
+     </template>
 </odoo>
