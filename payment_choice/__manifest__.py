@@ -19,6 +19,7 @@
     'data': [
         'views/payment_provider_views.xml',
         'views/payment_choice_templates.xml',
+
         'views/invoice_choice_register_payment.xml',
         'views/sales_order_choice_register_payment.xml',
 
