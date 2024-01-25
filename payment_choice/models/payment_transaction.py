@@ -92,7 +92,7 @@ class PaymentTransaction(models.Model):
                 
         payload = {
                 "DeviceCreditCardGuid" : self.provider_id.choice_device_cc_guid,
-                "DeviceAchGuid": self.provider_id.choice_device_ach_guid,
+                # "DeviceAchGuid": self.provider_id.choice_device_ach_guid,
                 "Merchantname": self.company_id.name,
                 "Description": f"{self.company_id.name} {self.reference} Payment", #"TESTING DESCRIPTION", 
                 "Amount": float(self.amount),
