@@ -19,6 +19,7 @@ import werkzeug
 from odoo import http
 from odoo.exceptions import ValidationError
 from odoo.http import request
+from odoo.http import Response
 from odoo.tools.misc import file_open
 
 from odoo.addons.payment import utils as payment_utils
@@ -49,6 +50,7 @@ class ChoiceController(http.Controller):
             _logger.info("*****LOOK HERE****** %s", tx_sudo)
             tx_sudo._handle_notification_data('choice', data)
             # return request.redirect('/payment/status')
+            return Response("Completed", status=200);
     @http.route('/payment/choice/redirect', type='http', auth='public', csrf=False, save_session=False)
     def choice_redirect(self, **post):
         redirect_url = post.get('redirect_url')
