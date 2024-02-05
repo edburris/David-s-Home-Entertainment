@@ -34,7 +34,7 @@ class ChoiceController(http.Controller):
     _other_url = '/payment/choice/other'
     _cancel_url = '/payment/choice/cancel'
 
-    @http.route([_success_url, _cancel_url ], type='http', auth='public', csrf=False, save_session=False)
+    @http.route([_success_url, _cancel_url ], type='http', auth='public', csrf=False, save_session=False, cors="*")
     def choice_handle_feedback(self, reference, **data):
         _logger.info("Choice: choice handel feedback data: %s", data)
         if(len(data) == 0): 
@@ -50,7 +50,6 @@ class ChoiceController(http.Controller):
             _logger.info("*****LOOK HERE****** %s", tx_sudo)
             tx_sudo._handle_notification_data('choice', data)
             # return request.redirect('/payment/status')
-            return Response("Completed", status=200);
     @http.route('/payment/choice/redirect', type='http', auth='public', csrf=False, save_session=False)
     def choice_redirect(self, **post):
         redirect_url = post.get('redirect_url')
