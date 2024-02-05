@@ -48,7 +48,7 @@ class ChoiceController(http.Controller):
             )
             _logger.info("*****LOOK HERE****** %s", tx_sudo)
             tx_sudo._handle_notification_data('choice', data)
-            return request.redirect('/payment/status')
+            # return request.redirect('/payment/status')
     @http.route('/payment/choice/redirect', type='http', auth='public', csrf=False, save_session=False)
     def choice_redirect(self, **post):
         redirect_url = post.get('redirect_url')
