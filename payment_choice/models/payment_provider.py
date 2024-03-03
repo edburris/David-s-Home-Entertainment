@@ -70,7 +70,7 @@ class PaymentProvider(models.Model):
 
     def _choice_make_bearer_token():
         self.ensure_one()
-        url = url_join('https://sandboxv2.choice.dev/api/v1/token')
+        url = url_join('https://payments.choice.dev/api/v1/token')
         payload = {"grant_type": "password", 
                    "username": choice_utils.get_choice_user_name,
                    "password": choice_utils.get_choice_password  

@@ -7,8 +7,8 @@
 # Released under the GNU General Public License
 #
 SANDBOX_URL = "https://sandbox.choice.dev/api/v1/"
-BASE_URL = SANDBOX_URL#"https://payments.choice.dev/api/v1/"
-WEB_PORTAL_URL = "https://webportalsandbox.choice.dev/"
+BASE_URL = "https://payments.choice.dev/api/v1/"
+WEB_PORTAL_URL = "https://webportal.choice.dev/"
 SALES_URL = BASE_URL + "sales/"
 TOKEN_URL = BASE_URL + "token/"
 HOSTED_PAYMENT_PAGE_REQUEST_URL = BASE_URL + "HostedPaymentPageRequests/"
